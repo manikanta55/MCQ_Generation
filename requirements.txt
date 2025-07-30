@@ -1,8 +1,10 @@
 streamlit
-pypdf2
+PyPDF2
+pandas
 python-dotenv
 openai
 langchain
+langchain-community
 langchain-openai
+langchain-core
 faiss-cpu
-pandas
