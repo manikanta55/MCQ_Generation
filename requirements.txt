@@ -1,0 +1,8 @@
+streamlit
+pypdf2
+python-dotenv
+openai
+langchain
+langchain-openai
+faiss-cpu
+pandas

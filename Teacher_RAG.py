@@ -10,21 +10,29 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
+
+# from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
+
+
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
 
 # Securely load your OpenAI API Key from .env
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
 
 # ---- MCQ Parser ----
+
 def parse_teacher_mcqs(pdf_file):
     text = ""
     for page in PdfReader(pdf_file).pages:
         text += page.extract_text() + "\n"
 
-    mcq_pattern = re.compile(r"\d+\.\s*(.*?)\n\(A\)\s*(.*?)\s*\(B\)\s*(.*?)\s*\(C\)\s*(.*?)\s*\(D\)\s*(.*?)\n", re.DOTALL)
+    mcq_pattern = re.compile(r"\d+\.\s*(.*?)\n\(A\)\s*(.*?)\s*\(B\)\s*(.*?)\s*\(C\)\s*(.*?)\s*\(D\)\s*(.*?)\n",
+                             re.DOTALL)
     answer_key_pattern = re.findall(r"\d+\.\s*([A-D])", text)
 
     matches = mcq_pattern.findall(text)
@@ -179,7 +187,7 @@ if textbook_pdf and teacher_pdf:
             segment_size = math.ceil(len(chunks) / num_segments)
             responses = []
             for i in range(num_segments):
-                segment_chunks = chunks[i * segment_size : (i + 1) * segment_size]
+                segment_chunks = chunks[i * segment_size: (i + 1) * segment_size]
                 segment_context = "\n".join(segment_chunks)
                 segment_prompt = build_prompt(matching_examples, segment_context, {
                     "easy": easy_count // num_segments,
